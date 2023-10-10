@@ -1,0 +1,102 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  fullName String [not null]
+  email String [unique]
+  mobile String [unique]
+  userName String [unique, not null]
+  password String [not null]
+  profileImage String
+  requesters FollowRequest [not null]
+  receivers FollowRequest [not null]
+  posts Post [not null]
+  comments Comment [not null]
+  likesPost LikePost [not null]
+  likesComment LikeComment [not null]
+  followInfo FollowInfo [not null]
+}
+
+Table Post {
+  id Int [pk, increment]
+  caption String
+  photo String [not null]
+  postDate DateTime [default: `now()`, not null]
+  totalLike Int [not null, default: 0]
+  userId Int [not null]
+  user User [not null]
+  comments Comment [not null]
+  likesPost LikePost [not null]
+}
+
+Table Comment {
+  id Int [pk, increment]
+  message String [not null]
+  postDate DateTime [default: `now()`, not null]
+  userId Int [not null]
+  user User [not null]
+  postId Int [not null]
+  post Post [not null]
+  likesComment LikeComment [not null]
+}
+
+Table LikePost {
+  id Int [pk, increment]
+  userId Int [not null]
+  user User [not null]
+  postId Int [not null]
+  post Post [not null]
+}
+
+Table LikeComment {
+  id Int [pk, increment]
+  userId Int [not null]
+  user User [not null]
+  commentId Int [not null]
+  comment Comment [not null]
+}
+
+Table FollowInfo {
+  id Int [pk, increment]
+  userId Int [not null]
+  user User [not null]
+  followerId Int [not null]
+  followingId Int [not null]
+}
+
+Table FollowRequest {
+  id Int [pk, increment]
+  status FollowStatus [not null]
+  createAt DateTime [default: `now()`, not null]
+  requester User [not null]
+  requesterId Int [not null]
+  receiver User [not null]
+  receiverId Int [not null]
+}
+
+Enum FollowStatus {
+  ACCEPTED
+  PENDING
+}
+
+Ref: Post.userId > User.id
+
+Ref: Comment.userId > User.id
+
+Ref: Comment.postId > Post.id
+
+Ref: LikePost.userId > User.id
+
+Ref: LikePost.postId > Post.id
+
+Ref: LikeComment.userId > User.id
+
+Ref: LikeComment.commentId > Comment.id
+
+Ref: FollowInfo.userId > User.id
+
+Ref: FollowRequest.requesterId > User.id
+
+Ref: FollowRequest.receiverId > User.id

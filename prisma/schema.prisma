@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int             @id @default(autoincrement())
+  fullName     String
+  email        String?         @unique
+  mobile       String?         @unique
+  userName     String          @unique
+  password     String
+  profileImage String?
+  requesters   FollowRequest[] @relation("requester")
+  receivers    FollowRequest[] @relation("receiver")
+  posts        Post[]
+  comments     Comment[]
+  likesPost    LikePost[]
+  likesComment LikeComment[]
+  followInfo   FollowInfo[]
+}
+
+model Post {
+  id        Int        @id @default(autoincrement())
+  caption   String?
+  photo     String
+  postDate  DateTime   @default(now())
+  totalLike Int        @default(0)
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  comments  Comment[]
+  likesPost LikePost[]
+}
+
+model Comment {
+  id           Int           @id @default(autoincrement())
+  message      String
+  postDate     DateTime      @default(now())
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id])
+  postId       Int
+  post         Post          @relation(fields: [postId], references: [id])
+  likesComment LikeComment[]
+}
+
+model LikePost {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+  postId Int
+  post   Post @relation(fields: [postId], references: [id])
+}
+
+model LikeComment {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  commentId Int
+  comment   Comment @relation(fields: [commentId], references: [id])
+}
+
+model FollowInfo {
+  id          Int  @id @default(autoincrement())
+  userId      Int
+  user        User @relation(fields: [userId], references: [id])
+  followerId  Int
+  followingId Int
+}
+
+model FollowRequest {
+  id          Int          @id @default(autoincrement())
+  status      FollowStatus
+  createAt    DateTime     @default(now())
+  requester   User         @relation("requester", fields: [requesterId], references: [id])
+  requesterId Int
+  receiver    User         @relation("receiver", fields: [receiverId], references: [id])
+  receiverId  Int
+}
+
+enum FollowStatus {
+  ACCEPTED
+  PENDING
+}
