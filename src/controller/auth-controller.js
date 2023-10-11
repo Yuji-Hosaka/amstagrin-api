@@ -20,7 +20,8 @@ exports.register = async (req, res, next) => {
       process.env.JWT_SECRET_KEY || "wjvn83nvc>41;Naw",
       { expiresIn: process.env.JWT_EXPIRE }
     );
-    res.status(201).json({ accessToken });
+    delete user.password
+    res.status(201).json({ accessToken, user });
   } catch (err) {
     next(err);
   }
@@ -53,9 +54,13 @@ exports.login = async (req, res, next) => {
       process.env.JWT_SECRET_KEY || "vn38E3nv9rr9[qnvajafnaad3",
       { expiresIn: process.env.JWT_EXPIRE }
     );
-
-    res.status(200).json({ accessToken });
+    delete user.password;
+    res.status(200).json({ accessToken, user });
   } catch (err) {
     next(err);
   }
 };
+
+exports.getMe = (req,res,next) => {
+  res.status(200).json({user: req.user})
+}
