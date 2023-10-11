@@ -8,13 +8,16 @@ const notFoundMiddleware = require("../src/middlewares/not-found");
 const errorMiddleware = require("../src/middlewares/error");
 const rateLimitMiddleware = require("../src/middlewares/rate-limit");
 const authRoute = require("./routes/auth-routes");
+const userRoute = require("./routes/user-routes");
 
 const app = express();
 
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+
 app.use("/auth", authRoute);
+app.use("/user", userRoute);
 
 app.use(rateLimitMiddleware);
 app.use(errorMiddleware);

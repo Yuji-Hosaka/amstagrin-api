@@ -11,12 +11,12 @@ module.exports = async (req, res, next) => {
     const token = authorization.split(" ")[1];
     const payload = jwt.verify(
       token,
-      process.env.JWT_SECRET || "mAc38adnvxaeienv"
+      process.env.JWT_SECRET_KEY || "mAc38adnvxaeienv"
     );
 
     const user = await prisma.user.findUnique({
       where: {
-        id: payload.userIfd,
+        id: payload.userId,
       },
     });
     if (!user) {
