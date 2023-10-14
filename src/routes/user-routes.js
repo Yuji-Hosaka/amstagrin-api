@@ -10,6 +10,7 @@ router.patch(
   "/",
   authenticateMiddleware,
   uploadMiddleware.single("profileImage"),
+
   userController.updateProfile
 );
 
