@@ -21,7 +21,8 @@ model User {
   comments     Comment[]
   likesPost    LikePost[]
   likesComment LikeComment[]
-  followInfo   FollowInfo[]
+  follower     FollowInfo[]    @relation("follower")
+  followed     FollowInfo[]    @relation("followed")
 }
 
 model Post {
@@ -64,11 +65,11 @@ model LikeComment {
 }
 
 model FollowInfo {
-  id          Int  @id @default(autoincrement())
-  userId      Int
-  user        User @relation(fields: [userId], references: [id])
-  followerId  Int
-  followingId Int
+  id         Int  @id @default(autoincrement())
+  followed   User @relation("followed", fields: [followedId], references: [id])
+  followedId Int
+  follower   User @relation("follower", fields: [followerId], references: [id])
+  followerId Int
 }
 
 model FollowRequest {
