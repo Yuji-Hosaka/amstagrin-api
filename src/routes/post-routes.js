@@ -13,4 +13,6 @@ router.post(
   postController.createPost
 );
 
+router.delete("/:postId", authenticateMiddleware, postController.deletePost);
+
 module.exports = router;
