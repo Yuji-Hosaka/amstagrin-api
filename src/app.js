@@ -10,6 +10,7 @@ const rateLimitMiddleware = require("../src/middlewares/rate-limit");
 const authRoute = require("./routes/auth-routes");
 const userRoute = require("./routes/user-routes");
 const followingRoute = require("./routes/following-routes");
+const postRoute = require('./routes/post-routes')
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static("public"));
 app.use("/auth", authRoute);
 app.use("/user", userRoute);
 app.use("/following", followingRoute);
+app.use('/post', postRoute)
 
 app.use(rateLimitMiddleware);
 app.use(errorMiddleware);
